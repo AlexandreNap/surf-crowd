@@ -1,18 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  2 17:58:54 2021
-
-@author: AlexandreN
-"""
-
 import os
-from os import listdir
-from os.path import join, isdir
-from os import chdir, getcwd
-
 from tkinter import *
 from PIL import Image, ImageTk
-import math
 import pandas as pd
 import time
 
@@ -76,10 +64,8 @@ class LabellingApp(Frame):
             original = Image.open(file_path)
         except Exception:
             print(Exception)
-            #self.save_res()
             self.update_annotation_stats()
             return -1
-            # self.master.destroy()
         else:
             original = original.resize((self.width, self.height))  # resize image
             self.image = ImageTk.PhotoImage(master=self.master, image=original)
@@ -99,7 +85,8 @@ class LabellingApp(Frame):
                                                    text=f"Annotated this session : {self.annotated_this_session}\n"
                                                    f"Remaining_to_annotate : {self.remaining_to_annotate}\n"
                                                    f"Session time : {self.session_time}\n"
-                                                   f"Mean annotation duration : {(self.session_time/self.annotated_this_session):.2f}",
+                                                   f"Mean annotation duration : "
+                                                   f"{(self.session_time/self.annotated_this_session):.2f}",
                                                    fill="black", font='Helvetica 15 bold', anchor='nw')
 
     def new_image(self):
