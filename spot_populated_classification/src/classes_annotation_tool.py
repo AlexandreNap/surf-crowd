@@ -39,15 +39,15 @@ class LabellingApp(Frame):
 
         self.w.bind("<Button 1>", self.positive_result)
         self.w.bind("<Button 3>", self.negative_result)
-        self.w.bind("<space>", self.positive_result2)
-        self.w.bind("f", self.negative_result2)
+        self.w.bind("<space>", self.positive_result)
+        self.w.bind("f", self.negative_result)
         self.positive_button = Button(self.master, text="There is at least a surfer\nleft_click\nspace_bar key",
-                                      command=self.positive_result)
+                                      command=self.positive_result2)
         self.positive_button.pack()
         self.positive_button.place(relx=0., rely=1., anchor=SW)
 
         self.negative_button = Button(self.master, text="There is no surfer\nright click\nf key",
-                                      command=self.negative_result)
+                                      command=self.negative_result2)
         self.negative_button.pack()
         self.negative_button.place(relx=0.09, rely=1., anchor=SW)
 
