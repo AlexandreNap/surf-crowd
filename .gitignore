@@ -1,6 +1,7 @@
-*.jpg
+*data*.jpg
+*data*.zip
 *.idea
 *.pt
 *.bin
 *.ipynb_checkpoints
-__pycache__
+*__pycache__
