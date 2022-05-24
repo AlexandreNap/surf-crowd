@@ -5,6 +5,9 @@ import pandas as pd
 import shutil
 
 
+"""
+use only the annotated classes and not the classification_prediction, something to change for more data
+"""
 def main():
     df = pd.read_csv("..\\spot_populated_classification\\data\\classification_dataset.csv")
     df = df[df['class'] == 1.0]
