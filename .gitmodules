@@ -1,3 +1,6 @@
 [submodule "surfers_detection/sahi"]
 	path = surfers_detection/sahi
 	url = https://github.com/AlexandreNap/sahi.git
+[submodule "surfers_detection/yolov5"]
+	path = surfers_detection/yolov5
+	url = https://github.com/AlexandreNap/yolov5.git
