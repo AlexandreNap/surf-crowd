@@ -26,4 +26,4 @@ def subsample_between_dates(date_min, date_max, n_max=200, path="images\\spots")
 
 
 if __name__ == "__main__":
-    subsample_between_dates("2022-06-01", "2022-07-15")
+    subsample_between_dates("2022-06-01", "2022-07-12")
