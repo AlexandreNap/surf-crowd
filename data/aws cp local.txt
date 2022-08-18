@@ -1,1 +1,4 @@
 aws s3 cp s3://Bucket/Folder LocalFolder --recursive
+
+# for copy a certain month in buffer dir
+aws s3 cp s3://[BucketName]/spots buffer --recursive --exclude "*" --include "*/[YEAR]-[MONTH]*"
