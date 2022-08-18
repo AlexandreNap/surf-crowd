@@ -8,7 +8,7 @@ import logging
 def clean_images(path="images\\spots"):
     logging.info('Started')
     files = [f for f in glob.glob(f"{path}\\*\\*.jpg", recursive=True) if os.path.getsize(f) > 0]
-    null_files = [f for f in glob.glob("{path}\\*\\*.jpg", recursive=True) if f not in files]
+    null_files = [f for f in glob.glob(f"{path}\\*\\*.jpg", recursive=True) if f not in files]
     logging.debug(len(null_files))
 
     for f in null_files:
@@ -44,10 +44,10 @@ def clean_images(path="images\\spots"):
                 os.remove(filename)
 
     logging.info("Zipping files")
-    shutil.make_archive("images\\spots", 'zip', "images\\spots\\")
+    shutil.make_archive(path, 'zip', path)
     logging.info("Finished")
 
 
 if __name__ == "__main__":
     logging.basicConfig(filename='myapp.log', level=logging.INFO)
-    clean_images()
+    clean_images("buffer")
