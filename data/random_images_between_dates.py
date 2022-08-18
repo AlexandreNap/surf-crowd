@@ -15,7 +15,7 @@ def subsample_between_dates(date_min, date_max, n_max=200, path="images\\spots")
                          "file_path": orig_files,
                          "new_path": [f"{directory}\\{f}" for f in files]})
     data['date'] = pd.to_datetime(data.date, format='%Y-%m-%d_%H-%M')
-    data = data[(date_min < data.date) & (data.date < date_max)]
+    data = data[(date_min <= data.date) & (data.date <= date_max)]
     if len(data) > n_max:
         data = data.sample(n_max)
 
@@ -26,4 +26,4 @@ def subsample_between_dates(date_min, date_max, n_max=200, path="images\\spots")
 
 
 if __name__ == "__main__":
-    subsample_between_dates("2022-06-01", "2022-07-12")
+    subsample_between_dates("2022-07-15", "2022-08-15", n_max=400)
