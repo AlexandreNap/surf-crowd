@@ -2,3 +2,4 @@
 *.jpg
 subsample_from_*/*.txt
 surf_only_images/*.txt
+buffer/
