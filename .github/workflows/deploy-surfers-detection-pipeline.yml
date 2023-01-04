@@ -46,5 +46,6 @@ jobs:
           --s3-prefix surfers-count-function \
           --region eu-west-3 \
           --resolve-s3 \
-          --resolve-image-repos
+          --resolve-image-repos \
+          --capabilities CAPABILITY_IAM
           
