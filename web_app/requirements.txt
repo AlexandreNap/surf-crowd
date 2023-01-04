@@ -1,0 +1,5 @@
+pymongo[srv]
+certifi
+pandas
+plotly
+streamlit
