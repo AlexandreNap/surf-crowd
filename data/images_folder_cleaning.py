@@ -5,7 +5,7 @@ from PIL import Image
 import logging
 
 
-def clean_images(path="images\\spots"):
+def clean_images(path="images\\spots", do_zip=False):
     logging.info('Started')
     files = [f for f in glob.glob(f"{path}\\*\\*.jpg", recursive=True) if os.path.getsize(f) > 0]
     null_files = [f for f in glob.glob(f"{path}\\*\\*.jpg", recursive=True) if f not in files]
@@ -42,12 +42,12 @@ def clean_images(path="images\\spots"):
             except (IOError, SyntaxError) as e:
                 print(filename)
                 os.remove(filename)
-
-    logging.info("Zipping files")
-    shutil.make_archive(path, 'zip', path)
+    if do_zip:
+        logging.info("Zipping files")
+        shutil.make_archive(path, 'zip', path)
     logging.info("Finished")
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='myapp.log', level=logging.INFO)
+    logging.basicConfig(level=logging.INFO)
     clean_images("buffer")

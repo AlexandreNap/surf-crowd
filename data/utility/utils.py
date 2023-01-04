@@ -2,9 +2,7 @@ import pymongo
 import certifi
 import boto3
 from SECRET_VARS import *
-from pymongo import MongoClient
 import re
-from tqdm import tqdm
 
 TEST = ""
 
@@ -54,7 +52,7 @@ def store_mongo_new_sviews(client, sviews):
     db = client["surf" + TEST]
     col = db["sviews"]
     item_list = []
-    for i, sview in tqdm(enumerate(sviews)):
+    for sview in sviews:
         dt = s3_sview_to_dt(sview)
         date = dt[:10]
         item_list.append({"spot_name": s3_sview_to_spot(sview),
