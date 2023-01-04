@@ -22,9 +22,14 @@ jobs:
       - run: |
           cd ./data/utility/
           ls
+          cd ..
+          cd ..
       - run: |
-          cd ./surfers_detection/yolov5/aws_lambda/
+          cd .surfers_detection/yolov5/aws_lambda/
           ls
+          cd ..
+          cd ..
+          cd ..
       - name: Setup project files
         run: |
           mv ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
