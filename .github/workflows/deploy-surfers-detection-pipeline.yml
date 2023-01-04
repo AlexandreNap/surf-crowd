@@ -25,7 +25,12 @@ jobs:
           cd ..
           cd ..
       - run: |
-          cd .surfers_detection/yolov5/aws_lambda/
+          ls
+          cd ./surfers_detection/
+          ls
+          cd ./yolov5/
+          ls
+          cd./aws_lambda/
           ls
           cd ..
           cd ..
