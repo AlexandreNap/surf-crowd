@@ -12,18 +12,18 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
-      #- uses: actions/setup-python@v3
-      #  with:
-      #    python-version: "3.8"
-      #- uses: aws-actions/setup-sam@v2
-      #- uses: aws-actions/configure-aws-credentials@v1
-      #  with:
-      #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #    aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
-      #    aws-region: eu-west-3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: eu-west-3
       - name: Setup project files
         run: |
-          mv ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
+          cp ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
           cat > ./surfers_detection/yolov5/aws_lambda/SECRET_VARS.py <<EOL
           line 1, MONGO_CREDENTIAL = "${{ secrets.MONGO_CREDENTIAL }}"
           line 2, MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }}"
@@ -35,7 +35,7 @@ jobs:
           EOL
 
       - name: Build and deploy
-        working-directory: ./surfers_detection/yolo5/aws_lambda
+        working-directory: ./surfers_detection/yolov5/aws_lambda
         run: |          
           sam build -t template_predict_on_new.yaml --use-container
           sam deploy --stack-name surfers-count-function \
