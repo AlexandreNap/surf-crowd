@@ -19,7 +19,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
           aws-region: eu-west-3
-
+      - run: ls
       - name: Setup project files
         run: |
           cp ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
@@ -28,7 +28,7 @@ jobs:
           line 2, MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }}"
           line 3, AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
           line 4, AWS_ACCESS_KEY_SECRET = "${{ secrets.AWS_ACCESS_KEY_SECRET }}"
-          line 5, AWS_BUCKET: "${{ secrets.AWS_BUCKET }}"
+          line 5, AWS_BUCKET = "${{ secrets.AWS_BUCKET }}"
           line 6 line
           ...
           EOL
