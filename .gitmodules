@@ -1,3 +1,4 @@
 [submodule "surfers_detection/yolov5"]
 	path = surfers_detection/yolov5
 	url = https://github.com/AlexandreNap/yolov5.git
+    branch = aws_lambda_integration
