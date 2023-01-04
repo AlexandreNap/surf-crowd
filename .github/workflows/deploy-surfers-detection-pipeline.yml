@@ -24,8 +24,7 @@ jobs:
       - name: Setup project files
         run: |
           mv ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
-          touch ./surfers_detection/yolo5/aws_lambda/SECRET_VARS.py
-          cat > ./surfers_detection/yolo5/aws_lambda/SECRET_VARS.py <<EOL
+          cat > ./surfers_detection/yolov5/aws_lambda/SECRET_VARS.py <<EOL
           line 1, MONGO_CREDENTIAL = "${{ secrets.MONGO_CREDENTIAL }}"
           line 2, MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }}"
           line 3, AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
