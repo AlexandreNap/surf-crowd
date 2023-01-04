@@ -26,7 +26,7 @@ jobs:
       - name: Setup project files
         run: |
           cp ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
-          aws s3 cp s3://surfcrowd/ml-models/surfers-detection/yolov5l_k32_best.pt ./surfers_detection/yolov5/weights/yolov5l_k32_best.pt model.pt
+          aws s3 cp s3://surfcrowd/ml-models/surfers-detection/yolov5l_k32_best.pt ./surfers_detection/yolov5/weights/yolov5l_k32_best.pt
           cat > ./surfers_detection/yolov5/aws_lambda/SECRET_VARS.py <<EOL
           line 1, MONGO_CREDENTIAL = "${{ secrets.MONGO_CREDENTIAL }}"
           line 2, MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }}"
@@ -40,7 +40,7 @@ jobs:
       - name: Build and deploy
         working-directory: ./surfers_detection/yolov5/aws_lambda
         run: |          
-          sam build -t template_predict_on_new.yaml #--use-container
+          sam build -t template_predict_on_new.yaml --use-container
           sam deploy --stack-name surfers-count-function \
           --s3_prefix surfers-count-function \
           --region = eu-west-3
