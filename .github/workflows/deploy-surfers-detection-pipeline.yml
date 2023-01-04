@@ -20,17 +20,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
           aws-region: eu-west-3
       - run: |
-          cd ./data/utility/
+          cd ./surfers_detection/yolov5/
           ls
-          cd ..
-          cd ..
-      - run: |
-          ls
-          cd ./surfers_detection/
-          ls
-          cd ./yolov5/
-          ls
-          cd./aws_lambda/
+          cd ./aws_lambda/
           ls
           cd ..
           cd ..
