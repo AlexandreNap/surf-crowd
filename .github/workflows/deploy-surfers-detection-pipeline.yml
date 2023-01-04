@@ -34,7 +34,8 @@ jobs:
           AWS_ACCESS_KEY_SECRET = "${{ secrets.AWS_ACCESS_KEY_SECRET }}"
           AWS_BUCKET = "${{ secrets.AWS_BUCKET }}"
           ...
-          EOL
+          EOL 
+
       - name: Build and deploy
         working-directory: ./surfers_detection/yolov5/aws_lambda
         run: |          
