@@ -35,11 +35,11 @@ jobs:
           AWS_BUCKET = "${{ secrets.AWS_BUCKET }}"
           ...
           EOL
-          echo ./surfers_detection/yolov5/aws_lambda/SECRET_VARS.py
       - name: Build and deploy
         working-directory: ./surfers_detection/yolov5/aws_lambda
         run: |          
           sam build -t template_predict_on_new.yaml --use-container
+          sam local invoke
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset \
           --stack-name surfers-count-function \
           --s3-prefix surfers-count-function \
