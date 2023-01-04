@@ -37,7 +37,7 @@ jobs:
       - name: Build and deploy
         working-directory: ./surfers_detection/yolov5/aws_lambda
         run: |          
-          sam build -t template_predict_on_new.yaml --use-container
+          sam build -t template_predict_on_new.yaml #--use-container
           sam deploy --stack-name surfers-count-function \
           --s3_prefix surfers-count-function \
           --region = eu-west-3
