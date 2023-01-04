@@ -28,15 +28,14 @@ jobs:
           cp ./data/utility/utils.py ./surfers_detection/yolov5/aws_lambda/cloud_utils.py
           aws s3 cp s3://surfcrowd/ml-models/surfers-detection/yolov5l_k32_best.pt ./surfers_detection/yolov5/weights/yolov5l_k32_best.pt
           cat > ./surfers_detection/yolov5/aws_lambda/SECRET_VARS.py <<EOL
-          line 1, MONGO_CREDENTIAL = "${{ secrets.MONGO_CREDENTIAL }}"
-          line 2, MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }}"
-          line 3, AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          line 4, AWS_ACCESS_KEY_SECRET = "${{ secrets.AWS_ACCESS_KEY_SECRET }}"
-          line 5, AWS_BUCKET = "${{ secrets.AWS_BUCKET }}"
-          line 6 line
+          MONGO_CREDENTIAL = "${{ secrets.MONGO_CREDENTIAL }}"
+          MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }}"
+          AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          AWS_ACCESS_KEY_SECRET = "${{ secrets.AWS_ACCESS_KEY_SECRET }}"
+          AWS_BUCKET = "${{ secrets.AWS_BUCKET }}"
           ...
           EOL
-
+          echo ./surfers_detection/yolov5/aws_lambda/SECRET_VARS.py
       - name: Build and deploy
         working-directory: ./surfers_detection/yolov5/aws_lambda
         run: |          
@@ -48,4 +47,3 @@ jobs:
           --resolve-s3 \
           --resolve-image-repos \
           --capabilities CAPABILITY_IAM
-          
