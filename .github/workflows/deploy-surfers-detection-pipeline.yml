@@ -1,0 +1,42 @@
+name: Deploy Surfers Detection Pipeline
+on:
+  workflow_dispatch
+#  push:
+#      paths:
+#      - 'surfers_detection/yolov5/aws_lambda/**'
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+
+      - name: Setup project files
+        run: |
+          cp ./data/utility/utils.py ./surfers_detection/yolo5/aws_lambda/cloud_utils.py
+          cat >./surfers_detection/yolo5/aws_lambda/SECRET_VARS.py <<EOL
+          line 1, MONGO_CREDENTIAL = "${{ secrets.MONGO_CREDENTIAL }}"
+          line 2, MONGO_ADRESS = "${{ secrets.MONGO_ADRESS }"}
+          line 3, AWS_ACCESS_KEY_ID = "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          line 4, AWS_ACCESS_KEY_SECRET = "${{ secrets.AWS_ACCESS_KEY_SECRET }}"
+          line 5, AWS_BUCKET: "${{ secrets.AWS_BUCKET }}"
+          line 6 line
+          ...
+          EOL
+
+      - name: Build and deploy
+        working-directory: ./surfers_detection/yolo5/aws_lambda
+        run: |          
+          sam build -t template_predict_on_new.yaml --use-container
+          sam deploy --stack-name surfers-count-function \
+          --s3_prefix surfers-count-function \
+          --region = eu-west-3
