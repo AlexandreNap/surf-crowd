@@ -1,9 +1,6 @@
 name: Deploy Surfers Detection Pipeline
 on:
   workflow_dispatch
-#  push:
-#      paths:
-#      - 'surfers_detection/yolov5/aws_lambda/**'
 
 jobs:
   Explore-GitHub-Actions:
