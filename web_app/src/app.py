@@ -1,17 +1,20 @@
-import numpy as np
-import pandas as pd
+import sys
+import subprocess
 import streamlit as st
 import streamlit.components.v1 as components
+
+subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "../requirements.txt"])
+
+import numpy as np
+import pandas as pd
 import plotly.express as px
-from SECRET import *
 import pymongo
 import certifi
 import datetime
 
-
 @st.cache
 def get_data(date1, date2):
-    client = pymongo.MongoClient(MONGO_ADRESS, tlsCAFile=certifi.where())
+    client = pymongo.MongoClient(st.secrets["MONGO_ADRESS"], tlsCAFile=certifi.where())
     db = client["surf"]
     col = db["sviews"]
     my_list = []
