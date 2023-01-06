@@ -12,6 +12,9 @@ Example of predictions on val set:
 ![My Image](images/detection_output3.png)
 ![My Image](images/detection_output4.png)
 
+## Visualise data
+Visualise data report using this [dashboard](https://surf-crowd.streamlit.app/).
+
 ## Crowdedness prediction
 
 Use evolution of surfers count, meteo data, temporal features, and surf condition forecast to predict crowdedness of surf spots.

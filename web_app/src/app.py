@@ -12,7 +12,21 @@ import certifi
 import datetime
 
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide",
+                   page_title="Surf-Crowd")
+
+st.header("""Surf Crowd
+Cette page permet de visualiser des reports de spots de surfs français. 
+Les spots actuellement analysés sont de Biarritz, Anglet, Capbreton,
+et Lacanau.
+
+Une IA scanne les sports de surf en direct pour obtenir de manière régulière des
+informations sur les spots de surf.
+Elle détecte l'ensemble des surfeurs à l'eau et les comptes.
+
+#### Remarques : 
+Les baigneurs et plagistes ne sont généralement pas détectés
+Des surfeurs peuvent par moment être cachés derrière des séries de vagues et ne pas être comptés.""")
 
 
 @st.experimental_singleton
@@ -29,7 +43,7 @@ def get_data(date1, date2):
     col = db["sviews"]
     my_list = []
     # add use of optional date_range
-    query = {"date": {"$gte": date1, "$lt": date2}, "n_surfers_yolo5": {"$gt": -1}}
+    query = {"date": {"$gte": date1, "$lte": date2}, "n_surfers_yolo5": {"$gt": -1}}
     for x in col.find(query):
         my_list.append(x)
     return my_list
