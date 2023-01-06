@@ -3,7 +3,7 @@ import subprocess
 import streamlit as st
 import streamlit.components.v1 as components
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "../requirements.txt"])
+subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "/app/surf-crowd/web_app/requirements.txt"])
 
 import numpy as np
 import pandas as pd
@@ -11,6 +11,7 @@ import plotly.express as px
 import pymongo
 import certifi
 import datetime
+
 
 @st.cache
 def get_data(date1, date2):
