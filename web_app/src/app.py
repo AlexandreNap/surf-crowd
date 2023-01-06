@@ -47,7 +47,7 @@ df.sort_values(by="date_time", inplace=True)
 
 fig = px.line(df, x='date_time', y="n_surfers_yolo5", color="spot_name", template="seaborn",
               title="Report du nombre de surfeurs", labels={'date_time': '', 'n_surfers_yolo5': ''})
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 col1, col2 = st.columns(2)
 with col1:
