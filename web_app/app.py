@@ -79,22 +79,33 @@ def weighted_moving_average(df, w0=0.0009):
     return df
 
 
+def add_0_on_start_end_days(df, cols=["n_surfers"]):
+    df_temp = df.groupby(["date", "spot_name"])["date_time"] \
+        .aggregate(["min", "max"]).reset_index()
+    df_temp["min"] = df_temp["min"] - datetime.timedelta(minutes=15)
+    df_temp["max"] = df_temp["max"] + datetime.timedelta(minutes=15)
+    df_temp = df_temp.melt(id_vars=["date", "spot_name"], value_vars=['min', 'max'], value_name="date_time")
+    for col in cols:
+        df_temp[col] = 0
+    df_temp.drop(columns=["variable"], inplace=True)
+    df = pd.concat((df, df_temp), axis=0)
+    df.sort_values(by=["date_time"], inplace=True)
+    return df
+
+
 def preprocess_data(df):
     df['date_time'] = pd.to_datetime(df.date_time, format='%Y-%m-%d_%H-%M')
     df["n_surfers"] = df["n_surfers_yolo5"]
     df = df[["date", "spot_name", "date_time", "n_surfers"]]
     df = remove_frozen_webcam_days(df)
 
-    df_temp = df.groupby(["date", "spot_name"])["date_time"] \
-        .aggregate(["min", "max"]).reset_index()
-    df_temp["min"] = df_temp["min"] - datetime.timedelta(minutes=45)
-    df_temp["max"] = df_temp["max"] + datetime.timedelta(minutes=45)
-    df_temp = df_temp.melt(id_vars=["date", "spot_name"], value_vars=['min', 'max'], value_name="date_time")
-    df_temp["n_surfers"] = 0
-    df_temp.drop(columns=["variable"], inplace=True)
-    df = pd.concat((df, df_temp), axis=0)
+    df = add_0_on_start_end_days(df)
     df.sort_values(by=["date_time"], inplace=True)
+
     df = weighted_moving_average(df)
+    df = df[["date", "spot_name", "date_time", "n_surfers", "n_surfers_wma"]]
+    df = add_0_on_start_end_days(df, ["n_surfers", "n_surfers_wma"])
+
     return df
 
 
