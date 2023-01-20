@@ -81,12 +81,12 @@ def preprocess_data(df):
     return df
 
 
-start_date = st.sidebar.date_input('start date', datetime.datetime.today() - datetime.timedelta(28))
-df = pd.DataFrame(get_data(start_date.strftime('%Y-%m-%d'),
-                           (start_date + datetime.timedelta(28)).strftime('%Y-%m-%d')))
+date = st.sidebar.date_input('date', datetime.datetime.today())
+df = pd.DataFrame(get_data((date - datetime.timedelta(28)).strftime('%Y-%m-%d'),
+                           date.strftime('%Y-%m-%d')))
+df = preprocess_data(df)
 
-
-df_last7 = df[df.date_time > datetime.datetime.today() - datetime.timedelta(7)]
+df_last7 = df[df.date_time > (date - datetime.timedelta(7)).strftime('%Y-%m-%d')]
 
 fig = px.line(df_last7, x='date_time', y="n_surfers_yolo5", color="spot_name", template="seaborn",
               title="Report du nombre de surfeurs", labels={'date_time': '', 'n_surfers_yolo5': ''})
