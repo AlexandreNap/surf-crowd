@@ -47,25 +47,42 @@ def get_data(date1, date2):
 
 
 def remove_frozen_webcam_days(df):
-    df_temp = df.groupby(["date", "spot_name"])["n_surfers_yolo5"].std().reset_index()
+    df_temp = df.groupby(["date", "spot_name"])["n_surfers"].std().reset_index()
     df_temp.columns = ["date", "spot_name", "freezing"]
     df = df.merge(df_temp, on=["date", "spot_name"])
-    df["freezing"] = (df["freezing"] == 0) & (df["n_surfers_yolo5"] > 0)
+    df["freezing"] = (df["freezing"] == 0) & (df["n_surfers"] > 0)
     df = df[~df["freezing"]]
     return df
 
 
-def weighted_moving_average(df):
-    df["dt-1"] = df.groupby(["spot_name"])["date_time"].shift(1)
-    df["dt-1"] = pd.to_datetime(df["dt-1"], format='%Y-%m-%d_%H-%M')
+def weighted_moving_average(df, w0=0.0009):
     df["date_time"] = pd.to_datetime(df["date_time"], format='%Y-%m-%d_%H-%M')
-    df["dt-1"] = (df["date_time"] - df["dt-1"]) / np.timedelta64(1, 's')
+    df.sort_values(by=["date_time"], inplace=True)
+
+    df["dt-1"] = df.groupby(["spot_name", "date"])["date_time"].shift(1)
+    df["dt-1"] = pd.to_datetime(df["dt-1"], format='%Y-%m-%d_%H-%M')
+    df["nsurfers-1"] = df.groupby(["spot_name", "date"])["n_surfers"].shift(1)
+    df["delta-1"] = (df["date_time"] - df["dt-1"]) / np.timedelta64(1, 's')
+
+    df["dt-2"] = df.groupby(["spot_name", "date"])["date_time"].shift(2)
+    df["dt-2"] = pd.to_datetime(df["dt-2"], format='%Y-%m-%d_%H-%M')
+    df["nsurfers-2"] = df.groupby(["spot_name", "date"])["n_surfers"].shift(2)
+    df["delta-2"] = (df["date_time"] - df["dt-2"]) / np.timedelta64(1, 's')
+
+    df.replace("NaT", np.NaN, inplace=True)
+    df.fillna(0.0001, inplace=True)
+    df["n_surfers_wma"] = df.apply(lambda x:\
+                                       (x["n_surfers"] * w0 +
+                                        x["nsurfers-1"] / x["delta-1"] +
+                                        x["nsurfers-2"] / x["delta-2"]) / (w0 + 1/x["delta-1"] + 1/x["delta-2"]),
+                                   axis=1)
     return df
 
 
 def preprocess_data(df):
     df['date_time'] = pd.to_datetime(df.date_time, format='%Y-%m-%d_%H-%M')
-    df = df[["date", "spot_name", "date_time", "n_surfers_yolo5"]]
+    df["n_surfers"] = df["n_surfers_yolo5"]
+    df = df[["date", "spot_name", "date_time", "n_surfers"]]
     df = remove_frozen_webcam_days(df)
 
     df_temp = df.groupby(["date", "spot_name"])["date_time"] \
@@ -73,7 +90,7 @@ def preprocess_data(df):
     df_temp["min"] = df_temp["min"] - datetime.timedelta(minutes=45)
     df_temp["max"] = df_temp["max"] + datetime.timedelta(minutes=45)
     df_temp = df_temp.melt(id_vars=["date", "spot_name"], value_vars=['min', 'max'], value_name="date_time")
-    df_temp["n_surfers_yolo5"] = 0
+    df_temp["n_surfers"] = 0
     df_temp.drop(columns=["variable"], inplace=True)
     df = pd.concat((df, df_temp), axis=0)
     df.sort_values(by=["date_time"], inplace=True)
@@ -86,10 +103,9 @@ df = pd.DataFrame(get_data((date - datetime.timedelta(28)).strftime('%Y-%m-%d'),
                            date.strftime('%Y-%m-%d')))
 df = preprocess_data(df)
 
-df_last7 = df[df.date_time > (date - datetime.timedelta(7)).strftime('%Y-%m-%d')]
-
-fig = px.line(df_last7, x='date_time', y="n_surfers_yolo5", color="spot_name", template="seaborn",
-              title="Report du nombre de surfeurs", labels={'date_time': '', 'n_surfers_yolo5': ''})
+fig = px.line(df[df.date_time > (date - datetime.timedelta(7)).strftime('%Y-%m-%d')],
+              x='date_time', y="n_surfers_wma", color="spot_name", template="seaborn",
+              title="Report du nombre de surfeurs (moyenne mobile)", labels={'date_time': '', 'n_surfers_wma': ''})
 st.plotly_chart(fig, use_container_width=True)
 
 
@@ -98,9 +114,9 @@ On ne compte pas ici le nombre de surfeurs différents.\n
 Si un surfeurs reste sur le spot pendant une heure et est détecté toutes les 10 minutes, il sera compté 6 fois""")
 
 fig = px.bar(
-        df.groupby(["date", "spot_name"])["n_surfers_yolo5"].sum().reset_index(),
-        x='date', y="n_surfers_yolo5", color="spot_name", template="seaborn",
-        title="Comptage quotidien", labels={'spot_name': '', 'n_surfers_yolo5': ''},
+        df.groupby(["date", "spot_name"])["n_surfers"].sum().reset_index(),
+        x='date', y="n_surfers", color="spot_name", template="seaborn",
+        title="Comptage quotidien", labels={'spot_name': '', 'n_surfers': ''},
         barmode="stack"
 )
 st.plotly_chart(fig)
@@ -109,17 +125,17 @@ st.plotly_chart(fig)
 col1, col2 = st.columns(2)
 with col1:
     fig = px.bar(
-        df.groupby(["spot_name"])["n_surfers_yolo5"].sum().reset_index(),
-        x='spot_name', y="n_surfers_yolo5", template="seaborn",
-        title="Nombre de surfeurs total sur la période", labels={'spot_name': '', 'n_surfers_yolo5': ''}
+        df.groupby(["spot_name"])["n_surfers"].sum().reset_index(),
+        x='spot_name', y="n_surfers", template="seaborn",
+        title="Nombre de surfeurs total sur la période", labels={'spot_name': '', 'n_surfers': ''}
     )
     st.plotly_chart(fig)
 
 with col2:
     fig = px.bar(
-        df.groupby(["spot_name"])["n_surfers_yolo5"].mean().reset_index(),
-        x='spot_name', y="n_surfers_yolo5", template="seaborn",
-        title="Nombre de surfeurs moyen sur la période", labels={'spot_name': '', 'n_surfers_yolo5': ''}
+        df.groupby(["spot_name"])["n_surfers"].mean().reset_index(),
+        x='spot_name', y="n_surfers", template="seaborn",
+        title="Nombre de surfeurs moyen sur la période", labels={'spot_name': '', 'n_surfers': ''}
     )
     st.plotly_chart(fig)
 
