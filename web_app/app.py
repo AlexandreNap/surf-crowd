@@ -16,14 +16,14 @@ Cette page permet de visualiser des reports de spots de surfs français.
 Les spots actuellement analysés sont de Biarritz, Anglet, Capbreton,
 et Lacanau.
 
-Une IA scanne les sports de surf en direct pour obtenir de manière régulière des
+Un système d'IA scanne les sports de surf en direct pour obtenir de manière régulière des
 informations sur les spots de surf.
-Elle détecte l'ensemble des surfeurs à l'eau et les comptes.
+Le système détecte l'ensemble des surfeurs à l'eau et les compte.
 
 #### Remarques : 
 * Les baigneurs et plagistes ne sont généralement pas détectés.
 * Des surfeurs peuvent par moment être cachés derrière des séries de vagues et ne pas être comptés.
-* Les webcams des plages peuvent tomber en panne, empéchant toute prise d'information  visuelle sur le spot""")
+* Les webcams des plages peuvent tomber en panne, empéchant toute prise d'information visuelle sur le spot.""")
 
 
 @st.experimental_singleton
