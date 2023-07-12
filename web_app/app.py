@@ -21,7 +21,7 @@ de manière régulière des informations sur les spots de surf.
 Le système détecte l'ensemble des surfeurs à l'eau et les comptes.
 
 #### Remarques : 
-* Les baigneurs et plagistes sont généralement différentiés des surfeurs. De même pour les surfeurs débutants dans les mousses.
+* Les baigneurs, plagistes, et surfeurs débutants dans les mousses sont généralement différentiés des surfeurs.
 * Des surfeurs peuvent par moment être cachés derrière des séries de vagues et ne pas être comptés.
 C'est pour cela que les données présentées sont lissées dans le temps.
 * Les webcams des plages peuvent parfois tomber en panne, empéchant toute prise d'information  visuelle sur le spot, 
