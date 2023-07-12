@@ -13,17 +13,19 @@ st.set_page_config(layout="wide",
 
 st.header("""Surf Crowd
 Cette page permet de visualiser des reports de spots de surfs français. 
-Les spots actuellement analysés sont de Biarritz, Anglet, Capbreton,
+Les spots actuellement analysés sont ceux de Biarritz, Anglet, Capbreton,
 et Lacanau.
 
-Une IA scanne les sports de surf en direct pour obtenir de manière régulière des
-informations sur les spots de surf.
-Elle détecte l'ensemble des surfeurs à l'eau et les comptes.
+Toute les 5 minutes, un modèle d'intelligence artificelle scanne les sports de surf en direct pour obtenir 
+de manière régulière des informations sur les spots de surf.
+Le système détecte l'ensemble des surfeurs à l'eau et les comptes.
 
 #### Remarques : 
-* Les baigneurs et plagistes ne sont généralement pas détectés.
+* Les baigneurs et plagistes sont généralement différentiés des surfeurs. De même pour les surfeurs débutants dans les mousses.
 * Des surfeurs peuvent par moment être cachés derrière des séries de vagues et ne pas être comptés.
-* Les webcams des plages peuvent tomber en panne, empéchant toute prise d'information  visuelle sur le spot""")
+C'est pour cela que les données présentées sont lissées dans le temps.
+* Les webcams des plages peuvent parfois tomber en panne, empéchant toute prise d'information  visuelle sur le spot, 
+ou répétant en boucle un même passage.""")
 
 
 @st.experimental_singleton
@@ -89,6 +91,13 @@ def add_0_on_start_end_days(df, cols=["n_surfers"]):
         df_temp[col] = 0
     df_temp.drop(columns=["variable"], inplace=True)
     df = pd.concat((df, df_temp), axis=0)
+
+    # remove 0 added on very last datetime by spot
+    last_date_by_spot = df.groupby(["spot_name"])["date_time"].max().reset_index()
+    df = pd.merge(df, last_date_by_spot, indicator=True, how='outer') \
+        .query('_merge=="left_only"') \
+        .drop('_merge', axis=1)
+
     df.sort_values(by=["date_time"], inplace=True)
     return df
 
@@ -116,13 +125,14 @@ df = preprocess_data(df)
 
 fig = px.line(df[df.date_time > (date - datetime.timedelta(7)).strftime('%Y-%m-%d')],
               x='date_time', y="n_surfers_wma", color="spot_name", template="seaborn",
-              title="Report du nombre de surfeurs (moyenne mobile)", labels={'date_time': '', 'n_surfers_wma': ''})
+              title="Report du nombre de surfeurs lissé", labels={'date_time': '', 'n_surfers_wma': ''})
 st.plotly_chart(fig, use_container_width=True)
 
 
 st.subheader("""Surf Report des 4 dernières semaines : 
 On ne compte pas ici le nombre de surfeurs différents.\n
-Si un surfeurs reste sur le spot pendant une heure et est détecté toutes les 10 minutes, il sera compté 6 fois""")
+Si un surfeurs reste sur le spot pendant une heure et est détecté toutes les 10 minutes, il sera compté 6 fois.\n
+Permet d'observer la fréquentation globale sur les 4 dernières semaines.""")
 
 fig = px.bar(
         df.groupby(["date", "spot_name"])["n_surfers"].sum().reset_index(),
@@ -130,7 +140,7 @@ fig = px.bar(
         title="Comptage quotidien", labels={'spot_name': '', 'n_surfers': ''},
         barmode="stack"
 )
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 
 col1, col2 = st.columns(2)
@@ -149,6 +159,3 @@ with col2:
         title="Nombre de surfeurs moyen sur la période", labels={'spot_name': '', 'n_surfers': ''}
     )
     st.plotly_chart(fig)
-
-components.html('<iframe src="https://magicseaweed.com/Le-Prevent-Surf-Report/1527/Embed/" width="1800" height="1600" frameborder="0"></iframe>',
-                width=1200, height=600)
