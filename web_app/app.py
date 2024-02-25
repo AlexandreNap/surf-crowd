@@ -16,9 +16,8 @@ Cette page permet de visualiser des reports de spots de surfs français.
 Les spots actuellement analysés sont ceux de Biarritz, Anglet, Capbreton,
 et Lacanau.
 
-Toute les 5 minutes, un modèle d'intelligence artificelle scanne les sports de surf en direct pour obtenir 
-de manière régulière des informations sur les spots de surf.
-Le système détecte l'ensemble des surfeurs à l'eau et les comptes.
+Toutes les 5 minutes, un modèle d'intelligence artificielle scanne en direct les spots de surf afin d'obtenir régulièrement des informations sur ces derniers.
+Le système détecte tous les surfeurs présents à l'eau et les compte.
 
 #### Remarques : 
 * Les baigneurs et plagistes sont généralement différentiés des surfeurs. De même pour les surfeurs débutants dans les mousses.
