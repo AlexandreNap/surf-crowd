@@ -70,7 +70,7 @@ def weighted_moving_average(df, w0=0.0009):
     df["nsurfers-2"] = df.groupby(["spot_name", "date"])["n_surfers"].shift(2)
     df["delta-2"] = (df["date_time"] - df["dt-2"]) / np.timedelta64(1, 's')
 
-    df.replace("NaT", np.NaN, inplace=True)
+    df.replace("NaT", np.nan, inplace=True)
     df.fillna(0.0001, inplace=True)
     df["n_surfers_wma"] = df.apply(lambda x:\
                                        (x["n_surfers"] * w0 +
