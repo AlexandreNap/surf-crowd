@@ -27,7 +27,7 @@ C'est pour cela que les données présentées sont lissées dans le temps.
 ou répétant en boucle un même passage.""")
 
 
-@st.experimental_singleton
+@st.cache_resource
 def init_connection():
     return pymongo.MongoClient(st.secrets["MONGO_ADRESS"], tlsCAFile=certifi.where())
 
@@ -35,7 +35,7 @@ def init_connection():
 client = init_connection()
 
 
-@st.experimental_memo(ttl=300)
+@st.cache_data(ttl=300)
 def get_data(date1, date2):
     db = client["surf"]
     col = db["sviews"]

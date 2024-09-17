@@ -1,5 +1,5 @@
-pymongo[srv]
-certifi
-pandas
-plotly
-streamlit
+pymongo[srv]==4.8.0
+certifi==2024.8.30
+pandas==2.2.2
+plotly==5.24.1
+streamlit==1.38.0
